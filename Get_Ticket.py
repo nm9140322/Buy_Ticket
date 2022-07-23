@@ -17,19 +17,17 @@ from selenium.webdriver.chrome.service import Service
 service = Service("./chromedriver.exe") 
 
 # 售票網個人帳號密碼：
-login_account = '個人帳號'
-login_password = '個人密碼'
+login_account = '0958658102'
+login_password = 'Nm00104070'
 
-# 原子少年票種（票價）區：OK
-area_3280 = 'div[1]/div/div/div/div[1]/' 
-area_2880 = 'div[2]/div/div/div/div/'
-area_2280 = 'div[3]/div/div/div/div[1]/'
-area_1880 = 'div[4]/div/div/div/div[1]/'
-area_1480 = 'div[5]/div/div/div/div[1]/'
-area_1080 = 'div[6]/div/div/div/div/'
+# 各區票種（票價）：
+high = 'div[1]/div/div/div/div[1]/'
+low = 'div[5]/div/div/div/div[1]/'  
+nomore = 'div[4]/div/div/div/div[1]/'   
+yesmore = 'div[2]/div/div/div/div[1]/'
 
 # 調整搶票順序：
-ticket_types = [area_3280, area_2880, area_2280, area_1880, area_1480, area_1080]
+ticket_types = [nomore, yesmore, high, low]
 # -------------------- #
 
 # 以下區域建議都不要動
@@ -121,7 +119,7 @@ def Pick_Ticketclass(driver, ticket_types):
     process = '//*[@id="app"]/div[1]/div/div/main/div/div/div[3]/div/div[2]/div[2]/div[2]/div[2]/'
 
     # 選擇票數：
-    pick_num = 'div/div/div[2]/div[3]/div/button[2]/span'
+    pick_num = 'div/div/div/div[3]/div/button[2]/span'
 
     # 剩餘標籤：OK
     soldout = 'button/div[1]/div[1]/small'
@@ -159,10 +157,10 @@ def Pick_Ticketclass(driver, ticket_types):
 
         # 點選5張
         driver.execute_script("arguments[0].click();", ticket_num)
-        driver.execute_script("arguments[0].click();", ticket_num)
-        driver.execute_script("arguments[0].click();", ticket_num)
-        driver.execute_script("arguments[0].click();", ticket_num)
-        driver.execute_script("arguments[0].click();", ticket_num)
+        # driver.execute_script("arguments[0].click();", ticket_num)
+        # driver.execute_script("arguments[0].click();", ticket_num)
+        # driver.execute_script("arguments[0].click();", ticket_num)
+        # driver.execute_script("arguments[0].click();", ticket_num)
         print('點選票數', datetime.now())
         break
 
@@ -259,7 +257,7 @@ def Buy_Ticket(service, driver, login_account, login_password, ticket_types):
     ticket_types = ticket_types
 
     # 開啟售票活動網頁:
-    activity_url = 'https://ticketplus.com.tw/order/a38b1a8b18a311b9a91a852025d0f8fa/ad97f714cb5ed5240b4fa55ce22e93cf'
+    activity_url = 'https://ticketplus.com.tw/order/8cec351ad37ec64b30b5055122fdc107/f273e667ee541b07e250c87d5eed0107'
     driver.get(activity_url) 
     print('開啟網頁', datetime.now())
 
@@ -267,6 +265,7 @@ def Buy_Ticket(service, driver, login_account, login_password, ticket_types):
     login(driver, login_account, login_password)
     print('開始搶票流程：', datetime.now())
     
+
     # 執行搶票流程，直到成功搶到或是排程強制結束任務為止
     while True:
         try:
@@ -310,12 +309,12 @@ from apscheduler.schedulers.background import BlockingScheduler
 import tzlocal # 時區差異會導致時間排程上產生一些問題，所以import當地時間可以避免一些麻煩
 sched = BlockingScheduler(timezone=str(tzlocal.get_localzone()))
 
-sched.add_job(Buy_Ticket, 'date', run_date=datetime(2022, 7, 24, 14, 28, 0), args = [service, driver, login_account, login_password, ticket_types]) # 年 月 日 時 分 秒 執行，14:28開始
-sched.add_job(job_quit, 'date', run_date=datetime(2022, 7, 24, 14, 35, 0), args = [driver]) # 14:35強制結束
-# sched.start() # 排程開始，若想直接跑就comment掉這行，直接用下面的函示
+sched.add_job(Buy_Ticket, 'date', run_date=datetime(2022, 7, 23, 20, 21, 0), args = [service, driver, login_account, login_password, ticket_types]) # 年 月 日 時 分 秒 執行，13:58開始
+# sched.add_job(job_quit, 'date', run_date=datetime(2022, 7, 23, 20, 20, 0), args = [driver]) # 強制結束
+# sched.start() # 排程開始
 
 # 直接試跑
-Buy_Ticket(service, driver, login_account, login_password, ticket_types) # 如果要用排程，要comment掉這行，改用上面的sched.start()
+# Buy_Ticket(service, driver, login_account, login_password, ticket_types)
 
 
 
