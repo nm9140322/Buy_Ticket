@@ -314,7 +314,7 @@ sched.add_job(Buy_Ticket, 'date', run_date=datetime(2022, 7, 23, 20, 21, 0), arg
 # sched.start() # 排程開始
 
 # 直接試跑
-# Buy_Ticket(service, driver, login_account, login_password, ticket_types)
+Buy_Ticket(service, driver, login_account, login_password, ticket_types)
 
 
 
