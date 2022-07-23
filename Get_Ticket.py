@@ -17,8 +17,8 @@ from selenium.webdriver.chrome.service import Service
 service = Service("./chromedriver.exe") 
 
 # 售票網個人帳號密碼：
-login_account = '0958658102'
-login_password = 'Nm00104070'
+login_account = '個人帳號'
+login_password = '個人密碼'
 
 # 各區票種（票價）：
 high = 'div[1]/div/div/div/div[1]/'
